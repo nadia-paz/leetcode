@@ -31,7 +31,7 @@ class LinkedList:
                 temp = temp.next
             print(" -> ".join(values)) 
 
-    def binary_to_decimal(self):
+    def binary_to_decimal1(self):
         if self.length == 0:
             return 0
         temp = self.head
@@ -42,6 +42,16 @@ class LinkedList:
         binary = "".join(binary_list)
         return int(binary, 2)
 
+    # algorithmic solution
+    def binary_to_decimal(self):
+        if self.length == 0:
+            return 0
+        num = 0
+        curr = self.head
+        while curr:
+            num = num*2 + curr.value
+            curr = curr.next
+        return num
 
 
 
