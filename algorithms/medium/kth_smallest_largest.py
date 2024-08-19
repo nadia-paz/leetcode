@@ -4,7 +4,7 @@ import heapq
 """
 Find Kth-smallest and Kth-largest numbers in the list without sorting. Not distinct element
 a) with heap
-b" with Quick Search algorithm
+b" with Quick Select algorithm
 """
 
 def find_kth_largest(nums: list, k: int):
@@ -60,27 +60,78 @@ def find_kth_smallest(nums:list, k:int):
         # print("Final mid:", mid)
         return mid[0]
 
+##### With heapq
+def kth_largest_heapq(nums: list, k:int):
+    heap = []
+    for n in nums:
+        if k > 0:
+            heapq.heappush(heap, n)
+            k -= 1
+        else:
+            heapq.heappush(heap, n)
+            heapq.heappop(heap)
+    return heapq.heappop(heap)
+
+def kth_smallest_heapq(nums: list, k:int):
+    # invert numbers since heapq is 
+    nums_inv = [0 - x for x in nums]
+    heap = []
+    for n in nums_inv:
+        if k > 0:
+            heapq.heappush(heap, n)
+            k -= 1
+        else:
+            heapq.heappushpop(heap, n)
+    return heapq.heappop(heap) * (-1)
+
 
 
 
 nums = [45, 36, 3, 33, 12, 1, 2, 90, 123, -3, 12, 56, 78, 52, 19]
 # nums = [45, 36, 3, 33, 12, 1, 2, 90]
-
-# Tests:
 nums1 = nums.copy()
 nums1.sort()
-for k in range(1, len(nums)+1):
-    print("k = ", k)
-    try:
-        result = find_kth_largest(nums, k)
-        assert  result == nums1[-k]
-        print("Kth largest pass, k =", k, "result = ", result)
-    except:
-        print("Kth largest fail, k =", k, "result = ", result)
-    try:
-        result = find_kth_smallest(nums, k)
-        assert result == nums1[k-1]
-        print("Kth smallest pass, k =", k, "result = ", result)
-    except:
-        print("Kth smallest fail, k=",k, "result = ", result)
-    print("**************\n")
+value = int(
+        input(
+            "Pick the function to test:\
+                 \n1: find_kth_largest\
+                 \n2: find_kth_smallest\
+                 \n3: kth_largest_heapq,\
+                 \n4: kth_smallest_heapq\n"
+            )
+        )
+# Tests:
+if value == 1:
+    # print("k = ", k)
+    for k in range(1, len(nums)+1):
+        # print("find_kth_largest")
+        try:
+            result = find_kth_largest(nums, k)
+            assert  result == nums1[-k]
+            print("Pass, k =", k, "result = ", result)
+        except:
+            print("Fail, k =", k, "result = ", result)
+elif value == 2:
+    for k in range(1, len(nums)+1):
+        try:
+            result = find_kth_smallest(nums, k)
+            assert result == nums1[k-1]
+            print("Pass, k =", k, "result = ", result)
+        except:
+            print("Fail, k=",k, "result = ", result)
+elif value == 3:
+    for k in range(1, len(nums)+1):
+        try:
+            result = kth_largest_heapq(nums, k)
+            assert result == heapq.nlargest(k, nums)[k-1]
+            print("Pass, k =", k, "result = ", result)
+        except:
+            print("Fail, k=",k, "result = ", result)
+else:
+    for k in range(1, len(nums)+1):
+        try:
+            result = kth_smallest_heapq(nums, k)
+            assert result == heapq.nsmallest(k, nums)[k-1]
+            print("Pass, k =", k, "result = ", result)
+        except:
+            print("Fail, k=",k, "result = ", result)
